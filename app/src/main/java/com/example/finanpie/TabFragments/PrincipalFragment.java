@@ -1,11 +1,14 @@
 package com.example.finanpie.TabFragments;
 
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,8 +59,9 @@ public class PrincipalFragment extends Fragment {
 
         cargarNombreYSaldo();
 
-        btnIngresar.setOnClickListener(v -> agregarMovimiento("ingreso", 100.0));
-        btnRetirar.setOnClickListener(v -> agregarMovimiento("retirar", 50.0));
+        btnIngresar.setOnClickListener(v -> mostrarDialogoMovimiento("ingreso"));
+        btnRetirar.setOnClickListener(v -> mostrarDialogoMovimiento("retirar"));
+
 
         return view;
     }
@@ -70,6 +74,38 @@ public class PrincipalFragment extends Fragment {
     }
     public void refrescarGrafico() {
         cargarNombreYSaldo(); // ya existente
+    }
+    private void mostrarDialogoMovimiento(String tipo) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle(tipo.equals("ingreso") ? "Ingresar saldo" : "Retirar saldo");
+
+        final EditText input = new EditText(requireContext());
+        input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        input.setHint("Cantidad (€)");
+
+        builder.setView(input);
+
+        builder.setPositiveButton("Aceptar", (dialog, which) -> {
+            String valor = input.getText().toString().trim();
+            if (valor.isEmpty()) {
+                Toast.makeText(requireContext(), "Ingrese una cantidad válida", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+                double monto = Double.parseDouble(valor);
+                if (monto <= 0) {
+                    Toast.makeText(requireContext(), "La cantidad debe ser mayor que 0", Toast.LENGTH_SHORT).show();
+                } else {
+                    agregarMovimiento(tipo, monto);
+                }
+            } catch (NumberFormatException e) {
+                Toast.makeText(requireContext(), "Formato inválido", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setNegativeButton("Cancelar", null);
+        builder.show();
     }
 
 
@@ -151,6 +187,11 @@ public class PrincipalFragment extends Fragment {
 
                         Double saldoActual = ds.child("saldo").getValue(Double.class);
                         if (saldoActual == null) saldoActual = 0.0;
+
+                        if (tipo.equals("retirar") && monto > saldoActual) {
+                            Toast.makeText(getContext(), "Saldo insuficiente. Tienes disponible: " + saldoActual + "€", Toast.LENGTH_LONG).show();
+                            return;
+                        }
 
                         double nuevoSaldo = tipo.equals("ingreso") ? saldoActual + monto : saldoActual - monto;
 
