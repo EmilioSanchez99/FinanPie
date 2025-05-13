@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -53,6 +54,34 @@ public class ObjetivosFragment extends Fragment {
         adapter = new MetaAdapter(listaMetas, requireContext());
         rvMetas.setLayoutManager(new LinearLayoutManager(getContext()));
         rvMetas.setAdapter(adapter);
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+                Meta meta = listaMetas.get(position);
+
+                new AlertDialog.Builder(requireContext())
+                        .setTitle("Eliminar meta")
+                        .setMessage("¿Estás seguro de que quieres eliminar esta meta?")
+                        .setPositiveButton("Sí", (dialog, which) -> {
+                            eliminarMetaDeFirebase(meta);
+                            listaMetas.remove(position);
+                            adapter.notifyItemRemoved(position);
+                        })
+                        .setNegativeButton("Cancelar", (dialog, which) -> {
+                            adapter.notifyItemChanged(position); // restaurar si cancela
+                            dialog.dismiss();
+                        })
+                        .setCancelable(false)
+                        .show();
+            }
+        }).attachToRecyclerView(rvMetas);
+
 
         fabAgregarMeta.setOnClickListener(v -> mostrarDialogoCrearMeta());
         mAuth = FirebaseAuth.getInstance();
@@ -63,6 +92,47 @@ public class ObjetivosFragment extends Fragment {
 
         return view;
     }
+
+    private void eliminarMetaDeFirebase(Meta meta) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+
+        String correoUsuario = user.getEmail();
+
+        FirebaseDatabase.getInstance("https://finanpie-a39a2-default-rtdb.europe-west1.firebasedatabase.app")
+                .getReference("usuarios")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot usuarioSnap : snapshot.getChildren()) {
+                            String correo = usuarioSnap.child("correo_electronico").getValue(String.class);
+                            String key = usuarioSnap.getKey();
+
+                            if (correo != null && correo.equals(correoUsuario)) {
+                                usuarioSnap.getRef()
+                                        .child("metas")
+                                        .child(meta.getId())
+                                        .removeValue();
+                            }
+
+                            if ("admin".equals(key)) {
+                                usuarioSnap.getRef()
+                                        .child("metas")
+                                        .child(meta.getId())
+                                        .removeValue();
+                            }
+                        }
+
+                        Toast.makeText(requireContext(), "Meta eliminada", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(requireContext(), "Error al eliminar la meta", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
 
     private void guardarMetaEnFirebase(Meta meta) {
         Log.d("ObjetivosFragment", "Iniciando guardarMetaEnFirebase");
