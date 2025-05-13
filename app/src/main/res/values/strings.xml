@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">FinanPie</string>
+    <string name="app_logo">FinanPie</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Contraseña</string>
+    <string name="login_button">Acceder</string>
+    <string name="register_link">Crear Cuenta</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

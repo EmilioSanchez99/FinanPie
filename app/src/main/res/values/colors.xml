@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="gray">#B0BEC5</color>
+    <color name="green">#4CAF50</color>
+    <color name="red">#F44336</color>
+    <color name="blue">#2196F3</color>
+    <color name="yellow">#FFEB3B</color>
+    <color name="gold">#e7c282</color>
+    <color name="verdeSaldo">#4CAF50</color>
+    <color name="rojoGastado">#F0594A</color>
+
+
+        <!--Fondos gennerales-->
+        <color name="background_primary">#FFFDD0</color> <!-- pastel_cream -->
+        <color name="background_secondary">#FFE5B4</color> <!-- pastel_banana -->
+        <color name="background_accent">#F8F9FA</color> <!-- Un gris claro para secciones secundarias -->
+
+        <color name="toolbar_primary">#F6C85F</color> <!-- Pastel honey, da presencia -->
+        <color name="toolbar_text">#FFFFFF</color> <!-- Texto blanco para buen contraste -->
+
+        <color name="card_background">#FFDAB9</color> <!-- Pastel peach, cálido pero suave -->
+        <color name="card_border">#E7C282</color> <!-- Pastel gold, sutil para bordes -->
+        <color name="card_text">#333333</color> <!-- Texto oscuro para legibilidad -->
+
+        <color name="button_primary">#28A745</color> <!-- Verde pastel vibrante, genera acción -->
+        <color name="button_primary_text">#FFFFFF</color> <!-- Texto claro para máximo contraste -->
+        <color name="button_secondary">#B0E0E6</color> <!-- Pastel azul, alternativa más relajada -->
+        <color name="button_secondary_text">#333333</color> <!-- Texto oscuro en botones secundarios -->
+
+        <color name="icon_primary">#F6C85F</color> <!-- Honey, usado en iconos destacados -->
+        <color name="icon_secondary">#FFDAB9</color> <!-- Peach, para opciones menos prioritarias -->
+        <color name="status_success">#28A745</color> <!-- Verde para acciones exitosas -->
+        <color name="status_warning">#FFC107</color> <!-- Amarillo para advertencias -->
+        <color name="status_error">#DC3545</color> <!-- Rojo para errores o alertas -->
+
+        <color name="search_background">#FFFFFF</color> <!-- Fondo limpio para input -->
+        <color name="search_border">#CCCCCC</color> <!-- Bordes finos para delimitación -->
+        <color name="search_text">#333333</color> <!-- Texto oscuro para buena lectura -->
+        <color name="search_placeholder">#888888</color> <!-- Texto tenue dentro del input -->
+
+
+
+</resources>
