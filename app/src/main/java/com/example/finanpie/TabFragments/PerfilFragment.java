@@ -38,96 +38,82 @@ public class PerfilFragment extends Fragment {
     private ImageView imgPerfil;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
 
+        inicializarVistas(view);
+        cargarImagenPerfil();
+
+        return view;
+    }
+
+    private void inicializarVistas(View view) {
         imgPerfil = view.findViewById(R.id.imgPerfil);
         TextView txtEditarPerfil = view.findViewById(R.id.txtEditarPerfil);
         CardView recomendarCard = view.findViewById(R.id.recomendarAmigos);
         CardView premiumCard = view.findViewById(R.id.premium);
-        CardView carlificarCard = view.findViewById(R.id.carlificar);
+        CardView calificarCard = view.findViewById(R.id.carlificar);
         CardView bloquearAnunciosCard = view.findViewById(R.id.bloquear_anuncios);
         CardView ajustesCard = view.findViewById(R.id.aboutUs);
         CardView contactoCard = view.findViewById(R.id.contacto);
 
-
-        contactoCard.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_SENDTO);
-            intent.setData(Uri.parse("mailto:finanpie.app@gmail.com"));
-
-            intent.putExtra(Intent.EXTRA_SUBJECT, "Contacto desde la app FinanPie");
-            intent.putExtra(Intent.EXTRA_TEXT, "Hola,!");
-
-            try {
-                startActivity(Intent.createChooser(intent, "Enviar correo con..."));
-            } catch (Exception e) {
-                Toast.makeText(getContext(), "No se pudo abrir el cliente de correo", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-        ajustesCard.setOnClickListener(v -> mostrarVentanaSobreNosotros());
-
-
-        bloquearAnunciosCard.setOnClickListener(v -> {
-            new AlertDialog.Builder(getContext())
-                    .setTitle("Desbloquea los anuncios")
-                    .setMessage("Elimina todos los anuncios sin necesidad de ser Premium!")
-                    .setPositiveButton("Comprar", (dialog, which) -> {
-                        Toast.makeText(getContext(), "Función aún no disponible", Toast.LENGTH_SHORT).show();
-                    })
-                    .setNegativeButton("Cancelar", null)
-                    .show();
-        });
-
-
-        carlificarCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_calificacion, null);
-                RatingBar ratingBar = dialogView.findViewById(R.id.ratingBar);
-
-                new AlertDialog.Builder(getContext())
-                        .setTitle("Califica la app")
-                        .setView(dialogView)
-                        .setPositiveButton("Aceptar", (dialog, which) -> {
-                            float rating = ratingBar.getRating();
-                            Toast.makeText(getContext(), "Gracias por tu valoración: " + rating + " estrellas", Toast.LENGTH_SHORT).show();
-                        })
-                        .setNegativeButton("Cancelar", null)
-                        .show();
-            }
-        });
-
-
         txtEditarPerfil.setOnClickListener(v -> abrirGaleria());
-
-        premiumCard.setOnClickListener(v -> {
-            new AlertDialog.Builder(getContext())
-                    .setTitle("Hazte Premium")
-                    .setMessage("Desbloquea funciones exclusivas como estadísticas avanzadas, sin anuncios y más.")
-                    .setPositiveButton("Comprar", (dialog, which) -> {
-                        Toast.makeText(getContext(), "Función aún no disponible", Toast.LENGTH_SHORT).show();
-                    })
-                    .setNegativeButton("Cancelar", null)
-                    .show();
-        });
-
-        recomendarCard.setOnClickListener(v -> {
-            try {
-                Uri smsUri = Uri.parse("smsto:");
-                Intent intent = new Intent(Intent.ACTION_SENDTO, smsUri);
-                intent.putExtra("sms_body", "¡Descubre FinanPie! Tu nueva app de finanzas personales 🤑📱");
-                startActivity(intent);
-            } catch (Exception e) {
-                Toast.makeText(getContext(), "No se pudo abrir el panel de mensajes", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        cargarImagenPerfil();
-        return view;
+        recomendarCard.setOnClickListener(v -> compartirPorSMS());
+        premiumCard.setOnClickListener(v -> mostrarDialogoPremium());
+        bloquearAnunciosCard.setOnClickListener(v -> mostrarDialogoBloquearAnuncios());
+        calificarCard.setOnClickListener(v -> mostrarDialogoCalificacion());
+        ajustesCard.setOnClickListener(v -> mostrarVentanaSobreNosotros());
+        contactoCard.setOnClickListener(v -> enviarCorreo());
     }
+
+    private void compartirPorSMS() {
+        try {
+            Uri smsUri = Uri.parse("smsto:");
+            Intent intent = new Intent(Intent.ACTION_SENDTO, smsUri);
+            intent.putExtra("sms_body", "¡Descubre FinanPie! Tu nueva app de finanzas personales 🤑📱");
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "No se pudo abrir el panel de mensajes", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void mostrarDialogoPremium() {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Hazte Premium")
+                .setMessage("Desbloquea funciones exclusivas como estadísticas avanzadas, sin anuncios y más.")
+                .setPositiveButton("Comprar", (dialog, which) -> {
+                    Toast.makeText(getContext(), "Función aún no disponible", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    private void mostrarDialogoBloquearAnuncios() {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Desbloquea los anuncios")
+                .setMessage("Elimina todos los anuncios sin necesidad de ser Premium!")
+                .setPositiveButton("Comprar", (dialog, which) -> {
+                    Toast.makeText(getContext(), "Función aún no disponible", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    private void mostrarDialogoCalificacion() {
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_calificacion, null);
+        RatingBar ratingBar = dialogView.findViewById(R.id.ratingBar);
+
+        new AlertDialog.Builder(getContext())
+                .setTitle("Califica la app")
+                .setView(dialogView)
+                .setPositiveButton("Aceptar", (dialog, which) -> {
+                    float rating = ratingBar.getRating();
+                    Toast.makeText(getContext(), "Gracias por tu valoración: " + rating + " estrellas", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
     private void mostrarVentanaSobreNosotros() {
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_sobre_nosotros, null);
 
@@ -140,9 +126,7 @@ public class PerfilFragment extends Fragment {
                         "Javier Marín Trujillo – 25 años\n" +
                         "Víctor Vera Rodrigues – 25 años";
 
-
         txtIntegrantes.setText(integrantes);
-
         txtWeb.setText("Visita nuestra web");
         txtWeb.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.medac.es.com"));
@@ -156,6 +140,18 @@ public class PerfilFragment extends Fragment {
                 .show();
     }
 
+    private void enviarCorreo() {
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:finanpie.app@gmail.com"));
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Contacto desde la app FinanPie");
+        intent.putExtra(Intent.EXTRA_TEXT, "Hola,!");
+
+        try {
+            startActivity(Intent.createChooser(intent, "Enviar correo con..."));
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "No se pudo abrir el cliente de correo", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private void abrirGaleria() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -181,15 +177,14 @@ public class PerfilFragment extends Fragment {
 
         String userId = user.getUid();
         StorageReference storageRef = FirebaseStorage
-                .getInstance("gs://finanpie-a39a2.firebasestorage.app") // Cambia al tuyo si es distinto
-                .getReference()
-                .child("imagenes_perfil/" + userId + ".jpg");
+                .getInstance()
+                .getReference("imagenes_perfil/" + userId + ".jpg");
 
         storageRef.putFile(imageUri)
                 .addOnSuccessListener(taskSnapshot -> storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                     guardarUrlEnRealtimeDatabase(uri.toString());
                     imgPerfil.setImageURI(imageUri);
-                    Log.d("PerfilFragment", "Imagen subida con éxito. URL: " + uri.toString());
+                    Log.d("PerfilFragment", "Imagen subida con éxito. URL: " + uri);
                     Toast.makeText(getContext(), getString(R.string.imagen_subida_exitosamente), Toast.LENGTH_SHORT).show();
                 }))
                 .addOnFailureListener(e -> {

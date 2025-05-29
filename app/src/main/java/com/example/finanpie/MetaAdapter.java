@@ -3,29 +3,27 @@ package com.example.finanpie;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.text.InputType;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.*;
+import android.widget.*;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MetaAdapter extends RecyclerView.Adapter<MetaAdapter.MetaViewHolder> {
 
-    private List<Meta> metas;
-    private Context context;
+    private final List<Meta> metas;
+    private final Context context;
+    private final Set<String> animacionesAplicadas = new HashSet<>();
+
 
     public MetaAdapter(List<Meta> metas, Context context) {
         this.metas = metas;
@@ -42,51 +40,71 @@ public class MetaAdapter extends RecyclerView.Adapter<MetaAdapter.MetaViewHolder
     @Override
     public void onBindViewHolder(@NonNull MetaViewHolder holder, int position) {
         Meta meta = metas.get(position);
-
-        holder.tvNombreMeta.setText(meta.getNombre());
-
         double acumulado = meta.getAcumulado();
         double objetivo = meta.getObjetivo();
         int progreso = (int) ((acumulado / objetivo) * 100);
 
-        holder.tvProgresoMeta.setText(context.getString(
-                R.string.progreso_meta,
-                progreso,
-                acumulado,
-                objetivo
-        ));
+        holder.tvNombreMeta.setText(meta.getNombre());
+        holder.tvProgresoMeta.setText(context.getString(R.string.progreso_meta, progreso, acumulado, objetivo));
         holder.progressBar.setProgress(progreso);
 
-        if (holder.cardMeta instanceof androidx.cardview.widget.CardView) {
-            androidx.cardview.widget.CardView card = (androidx.cardview.widget.CardView) holder.cardMeta;
-            if (progreso >= 100) {
-                card.setCardBackgroundColor(context.getResources().getColor(R.color.verde_esmeralda));
-            } else {
-                card.setCardBackgroundColor(context.getResources().getColor(android.R.color.white));
-            }
+        if (holder.cardMeta instanceof CardView) {
+            ((CardView) holder.cardMeta).setCardBackgroundColor(context.getResources().getColor(
+                    progreso >= 100 ? R.color.verde_esmeralda : android.R.color.white));
         }
 
-        holder.itemView.setOnClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle(context.getString(R.string.dialog_titulo_ingresar_meta));
+        holder.itemView.setOnClickListener(v -> mostrarDialogoIngresarCantidad(meta, position));
 
-            final EditText input = new EditText(context);
-            input.setHint(context.getString(R.string.hint_cantidad_meta));
-            input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            builder.setView(input);
+        if (!animacionesAplicadas.contains(meta.getId())) {
+            holder.itemView.animate()
+                    .translationX(10)
+                    .setDuration(100)
+                    .withEndAction(() -> holder.itemView.animate()
+                            .translationX(-10)
+                            .setDuration(100)
+                            .withEndAction(() -> holder.itemView.animate()
+                                    .translationX(0)
+                                    .setDuration(100)
+                                    .start())
+                            .start())
+                    .start();
 
-            builder.setPositiveButton(context.getString(R.string.btn_aniadir), (dialog, which) -> {
-                String ingresoStr = input.getText().toString().trim();
-                if (ingresoStr.isEmpty()) {
-                    Toast.makeText(context, context.getString(R.string.toast_ingrese_cantidad), Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            animacionesAplicadas.add(meta.getId());
+        }
 
+
+    }
+    public void reiniciarAnimaciones() {
+        animacionesAplicadas.clear();
+    }
+
+    @Override
+    public int getItemCount() {
+        return metas.size();
+    }
+
+    private void mostrarDialogoIngresarCantidad(Meta meta, int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(R.string.dialog_titulo_ingresar_meta);
+
+        final EditText input = new EditText(context);
+        input.setHint(R.string.hint_cantidad_meta);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        builder.setView(input);
+
+        builder.setPositiveButton(R.string.btn_aniadir, (dialog, which) -> {
+            String ingresoStr = input.getText().toString().trim();
+            if (ingresoStr.isEmpty()) {
+                Toast.makeText(context, R.string.toast_ingrese_cantidad, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
                 double ingreso = Double.parseDouble(ingresoStr);
-                double nuevoAcumulado = acumulado + ingreso;
+                double nuevoAcumulado = meta.getAcumulado() + ingreso;
 
-                if (nuevoAcumulado > objetivo) {
-                    double restante = objetivo - acumulado;
+                if (nuevoAcumulado > meta.getObjetivo()) {
+                    double restante = meta.getObjetivo() - meta.getAcumulado();
                     Toast.makeText(context,
                             context.getString(R.string.toast_no_superar_objetivo, restante),
                             Toast.LENGTH_LONG).show();
@@ -95,55 +113,49 @@ public class MetaAdapter extends RecyclerView.Adapter<MetaAdapter.MetaViewHolder
 
                 meta.setAcumulado(nuevoAcumulado);
                 notifyItemChanged(position);
+                guardarAcumuladoEnFirebase(meta);
 
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user != null) {
-                    String correoUsuario = user.getEmail();
-
-                    FirebaseDatabase.getInstance("https://finanpie-a39a2-default-rtdb.europe-west1.firebasedatabase.app")
-                            .getReference("usuarios")
-                            .addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    for (DataSnapshot usuarioSnap : snapshot.getChildren()) {
-                                        String correo = usuarioSnap.child("correo_electronico").getValue(String.class);
-
-                                        if (correo != null && correo.equals(correoUsuario)) {
-                                            usuarioSnap.getRef()
-                                                    .child("metas")
-                                                    .child(meta.getId())
-                                                    .child("acumulado")
-                                                    .setValue(meta.getAcumulado());
-                                        }
-
-                                        if ("admin".equals(usuarioSnap.getKey())) {
-                                            usuarioSnap.getRef()
-                                                    .child("metas")
-                                                    .child(meta.getId())
-                                                    .child("acumulado")
-                                                    .setValue(meta.getAcumulado());
-                                        }
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-                                    Toast.makeText(context,
-                                            context.getString(R.string.toast_error_guardar_acumulado, error.getMessage()),
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                }
-            });
-
-            builder.setNegativeButton(context.getString(R.string.btn_cancelar), null);
-            builder.show();
+            } catch (NumberFormatException e) {
+                Toast.makeText(context, R.string.formato_invalido, Toast.LENGTH_SHORT).show();
+            }
         });
+
+        builder.setNegativeButton(R.string.btn_cancelar, null);
+        builder.show();
     }
 
-    @Override
-    public int getItemCount() {
-        return metas.size();
+    private void guardarAcumuladoEnFirebase(Meta meta) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+
+        String correoUsuario = user.getEmail();
+        DatabaseReference refUsuarios = FirebaseDatabase.getInstance("https://finanpie-a39a2-default-rtdb.europe-west1.firebasedatabase.app")
+                .getReference("usuarios");
+
+        refUsuarios.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot usuarioSnap : snapshot.getChildren()) {
+                    String correo = usuarioSnap.child("correo_electronico").getValue(String.class);
+                    String key = usuarioSnap.getKey();
+
+                    if ((correo != null && correo.equals(correoUsuario)) || "admin".equals(key)) {
+                        usuarioSnap.getRef()
+                                .child("metas")
+                                .child(meta.getId())
+                                .child("acumulado")
+                                .setValue(meta.getAcumulado());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(context,
+                        context.getString(R.string.toast_error_guardar_acumulado, error.getMessage()),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public static class MetaViewHolder extends RecyclerView.ViewHolder {

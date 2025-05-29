@@ -27,7 +27,7 @@ public class SplashActivity extends AppCompatActivity {
 
         videoView.start();
 
-        // ❗ Por si quieres forzar cambio tras X segundos
+        //  forzar cambio tras X segundos
         /*
         new Handler().postDelayed(() -> {
             if (videoView.isPlaying()) videoView.stopPlayback();

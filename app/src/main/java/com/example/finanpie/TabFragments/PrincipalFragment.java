@@ -23,46 +23,47 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.*;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 public class PrincipalFragment extends Fragment {
 
     private TextView txtNombreUsuario;
-    private FirebaseAuth mAuth;
-    private DatabaseReference usuariosRef;
     private PieChart pieChart;
     private Button btnIngresar, btnRetirar;
+    private FirebaseAuth mAuth;
+    private DatabaseReference usuariosRef;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_principal, container, false);
 
+        initViews(view);
+        setupFirebase();
+        setupListeners();
+
+        cargarNombreYSaldo();
+        return view;
+    }
+
+    private void initViews(View view) {
         txtNombreUsuario = view.findViewById(R.id.txtNombreUsuario);
         pieChart = view.findViewById(R.id.pieChart);
         btnIngresar = view.findViewById(R.id.btnIngresar);
         btnRetirar = view.findViewById(R.id.btnRetirar);
+    }
 
+    private void setupFirebase() {
         mAuth = FirebaseAuth.getInstance();
-        usuariosRef = FirebaseDatabase.getInstance("https://finanpie-a39a2-default-rtdb.europe-west1.firebasedatabase.app").getReference("usuarios");
+        usuariosRef = FirebaseDatabase.getInstance("https://finanpie-a39a2-default-rtdb.europe-west1.firebasedatabase.app")
+                .getReference("usuarios");
+    }
 
-        cargarNombreYSaldo();
-
+    private void setupListeners() {
         btnIngresar.setOnClickListener(v -> mostrarDialogoMovimiento("ingreso"));
         btnRetirar.setOnClickListener(v -> mostrarDialogoMovimiento("retirar"));
-
-        return view;
     }
 
     @Override
@@ -82,30 +83,29 @@ public class PrincipalFragment extends Fragment {
         final EditText input = new EditText(requireContext());
         input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         input.setHint(getString(R.string.hint_cantidad));
-
         builder.setView(input);
 
-        builder.setPositiveButton("Aceptar", (dialog, which) -> {
-            String valor = input.getText().toString().trim();
-            if (valor.isEmpty()) {
-                Toast.makeText(requireContext(), getString(R.string.cantidad_invalida), Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            try {
-                double monto = Double.parseDouble(valor);
-                if (monto <= 0) {
-                    Toast.makeText(requireContext(), getString(R.string.cantidad_menor_cero), Toast.LENGTH_SHORT).show();
-                } else {
-                    agregarMovimiento(tipo, monto);
-                }
-            } catch (NumberFormatException e) {
-                Toast.makeText(requireContext(), getString(R.string.formato_invalido), Toast.LENGTH_SHORT).show();
-            }
-        });
-
+        builder.setPositiveButton("Aceptar", (dialog, which) -> procesarMovimiento(tipo, input.getText().toString().trim()));
         builder.setNegativeButton("Cancelar", null);
         builder.show();
+    }
+
+    private void procesarMovimiento(String tipo, String valor) {
+        if (valor.isEmpty()) {
+            Toast.makeText(requireContext(), R.string.cantidad_invalida, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            double monto = Double.parseDouble(valor);
+            if (monto <= 0) {
+                Toast.makeText(requireContext(), R.string.cantidad_menor_cero, Toast.LENGTH_SHORT).show();
+            } else {
+                agregarMovimiento(tipo, monto);
+            }
+        } catch (NumberFormatException e) {
+            Toast.makeText(requireContext(), R.string.formato_invalido, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void cargarNombreYSaldo() {
@@ -115,8 +115,7 @@ public class PrincipalFragment extends Fragment {
         String emailUsuario = user.getEmail();
 
         usuariosRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     String correo = ds.child("correo_electronico").getValue(String.class);
                     if (correo != null && correo.equals(emailUsuario)) {
@@ -125,44 +124,39 @@ public class PrincipalFragment extends Fragment {
                         Double saldoGastado = ds.child("saldo_gastado").getValue(Double.class);
 
                         if (nombre != null) {
-                            nombre = nombre.replace("\"", "");
-                            txtNombreUsuario.setText(getString(R.string.saludo_usuario, nombre));
+                            txtNombreUsuario.setText(getString(R.string.saludo_usuario, nombre.replace("\"", "")));
                         }
 
-                        if (saldo == null) saldo = 0.0;
-                        if (saldoGastado == null) saldoGastado = 0.0;
-
-                        mostrarGraficoSaldo(saldo, saldoGastado);
+                        mostrarGraficoSaldo(saldo != null ? saldo : 0.0, saldoGastado != null ? saldoGastado : 0.0);
                         return;
                     }
                 }
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), getString(R.string.error_cargar_perfil), Toast.LENGTH_SHORT).show();
+            @Override public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), R.string.error_cargar_perfil, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void mostrarGraficoSaldo(double saldo, double saldoGastado) {
-        ArrayList<PieEntry> entries = new ArrayList<>();
+        List<PieEntry> entries = new ArrayList<>();
         entries.add(new PieEntry((float) saldo, getString(R.string.grafico_saldo_disponible)));
         entries.add(new PieEntry((float) saldoGastado, getString(R.string.grafico_saldo_gastado)));
-        pieChart.getDescription().setEnabled(false);
 
         int verde = ContextCompat.getColor(requireContext(), R.color.verde_esmeralda);
-        int rojoClaro = ContextCompat.getColor(requireContext(), R.color.rojo_suave);
+        int rojo = ContextCompat.getColor(requireContext(), R.color.rojo_suave);
         int fondo = ContextCompat.getColor(requireContext(), R.color.gris_claro);
 
         PieDataSet dataSet = new PieDataSet(entries, "");
-        dataSet.setColors(verde, rojoClaro);
-        dataSet.setValueTextColor(R.color.azul_marino);
+        dataSet.setColors(verde, rojo);
+        dataSet.setValueTextColor(Color.BLACK);
         dataSet.setValueTextSize(20f);
 
         PieData data = new PieData(dataSet);
 
         pieChart.setData(data);
+        pieChart.setDescription(null);
         pieChart.setUsePercentValues(false);
         pieChart.setEntryLabelColor(Color.BLACK);
         pieChart.setHoleColor(fondo);
@@ -176,14 +170,12 @@ public class PrincipalFragment extends Fragment {
         String correoUsuario = user.getEmail();
 
         usuariosRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     String correo = ds.child("correo_electronico").getValue(String.class);
                     if (correo != null && correo.equals(correoUsuario)) {
-
                         Double saldoActual = ds.child("saldo").getValue(Double.class);
-                        if (saldoActual == null) saldoActual = 0.0;
+                        saldoActual = saldoActual != null ? saldoActual : 0.0;
 
                         if (tipo.equals("retirar") && monto > saldoActual) {
                             Toast.makeText(getContext(), getString(R.string.saldo_insuficiente, saldoActual), Toast.LENGTH_LONG).show();
@@ -191,20 +183,17 @@ public class PrincipalFragment extends Fragment {
                         }
 
                         double nuevoSaldo = tipo.equals("ingreso") ? saldoActual + monto : saldoActual - monto;
-
                         ds.getRef().child("saldo").setValue(nuevoSaldo);
 
                         if (tipo.equals("retirar")) {
-                            Double saldoGastadoActual = ds.child("saldo_gastado").getValue(Double.class);
-                            if (saldoGastadoActual == null) saldoGastadoActual = 0.0;
-                            double nuevoGastado = saldoGastadoActual + monto;
-                            ds.getRef().child("saldo_gastado").setValue(nuevoGastado);
+                            Double saldoGastado = ds.child("saldo_gastado").getValue(Double.class);
+                            saldoGastado = saldoGastado != null ? saldoGastado : 0.0;
+                            ds.getRef().child("saldo_gastado").setValue(saldoGastado + monto);
                         }
 
-                        long totalMovs = ds.child("movimientos").getChildrenCount();
-                        String nuevoId = "mov" + (totalMovs + 1);
-
+                        String nuevoId = "mov" + (ds.child("movimientos").getChildrenCount() + 1);
                         String fecha = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
                         Map<String, Object> nuevoMovimiento = new HashMap<>();
                         nuevoMovimiento.put("tipo", tipo);
                         nuevoMovimiento.put("monto", monto);
@@ -212,7 +201,7 @@ public class PrincipalFragment extends Fragment {
 
                         ds.getRef().child("movimientos").child(nuevoId).setValue(nuevoMovimiento)
                                 .addOnSuccessListener(aVoid -> {
-                                    Toast.makeText(getContext(), getString(R.string.movimiento_registrado), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), R.string.movimiento_registrado, Toast.LENGTH_SHORT).show();
                                     cargarNombreYSaldo();
                                 });
 
@@ -220,12 +209,11 @@ public class PrincipalFragment extends Fragment {
                     }
                 }
 
-                Toast.makeText(getContext(), getString(R.string.usuario_no_encontrado), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.usuario_no_encontrado, Toast.LENGTH_SHORT).show();
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), getString(R.string.error_registrar_movimiento), Toast.LENGTH_SHORT).show();
+            @Override public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getContext(), R.string.error_registrar_movimiento, Toast.LENGTH_SHORT).show();
             }
         });
     }
