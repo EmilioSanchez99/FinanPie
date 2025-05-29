@@ -1,6 +1,8 @@
 package com.example.finanpie;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -58,10 +60,25 @@ public class MainActivity extends AppCompatActivity {
         }).attach();
     }
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        SharedPreferences prefs = newBase.getSharedPreferences("config", MODE_PRIVATE);
+        String idioma = prefs.getString("idioma", "es");
 
-    // 🔁 Permitir a otros fragments acceder a PrincipalFragment
+        Locale locale = new Locale(idioma);
+        Locale.setDefault(locale);
+
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+
+        Context context = newBase.createConfigurationContext(config);
+        super.attachBaseContext(context);
+    }
+
+
+
     public PrincipalFragment getPrincipalFragment() {
-        return (PrincipalFragment) adapter.getFragment(0); // posición 0 = PrincipalFragment
+        return (PrincipalFragment) adapter.getFragment(0);
     }
 
     private void signOut() {
@@ -76,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -84,7 +100,12 @@ public class MainActivity extends AppCompatActivity {
             signOut();
             return true;
         } else if (id == R.id.cambiar_idioma) {
-            cambiarIdioma("en");
+            SharedPreferences prefs = getSharedPreferences("config", MODE_PRIVATE);
+            String idiomaActual = prefs.getString("idioma", "es");
+            String nuevoIdioma = idiomaActual.equals("es") ? "en" : "es";
+
+            prefs.edit().putString("idioma", nuevoIdioma).apply();
+            cambiarIdioma(nuevoIdioma);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -99,10 +120,13 @@ public class MainActivity extends AppCompatActivity {
 
         getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
 
+        // Reiniciar actividad
         Intent refresh = new Intent(this, this.getClass());
         refresh.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(refresh);
         finish();
     }
+
+
 
 }
