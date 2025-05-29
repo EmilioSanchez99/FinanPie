@@ -20,7 +20,7 @@
     <string name="btn_crear_cuenta">Create Account</string>
 
     <!-- Profile -->
-    <string name="texto_hola">Hello</string>
+    <string name="texto_hola">Welcome to profile</string>
     <string name="texto_editar_perfil">Edit profile</string>
 
     <!-- Options -->
@@ -104,8 +104,7 @@
     <string name="sin_movimientos">No transactions to export</string>
     <string name="exportado_correcto">Exported to Documents:\n%1$s</string>
     <string name="error_exportar">Export error: %1$s</string>
-
-
+    <string name="imagen_subida_exitosamente">Uploading image, wait...</string>
 
 
 </resources>

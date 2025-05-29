@@ -17,7 +17,7 @@
     <string name="hint_saldo_inicial">Saldo Inicial</string>
     <string name="btn_crear_cuenta">Crear Cuenta</string>
 
-    <string name="texto_hola">Hola</string>
+    <string name="texto_hola">Bienvenido al perfil</string>
     <string name="texto_editar_perfil">Editar perfil</string>
 
     <!-- Opciones -->
@@ -93,8 +93,7 @@
     <string name="sin_movimientos">No hay movimientos para exportar</string>
     <string name="exportado_correcto">Exportado a Documents:\n%1$s</string>
     <string name="error_exportar">Error al exportar: %1$s</string>
-
-
+    <string name="imagen_subida_exitosamente">Subiendo imagen, espere...</string>
 
 
 </resources>

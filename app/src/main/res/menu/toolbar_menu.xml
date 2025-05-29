@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/cambiar_idioma"
-        android:icon="@drawable/ic_settings"
+        android:icon="@drawable/ic_translate"
         android:title="Cambiar idioma"
         app:showAsAction="always" />
     <item

@@ -19,12 +19,14 @@
             android:padding="12dp">
 
             <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@drawable/circle_background"
-                android:padding="8dp"
+                android:id="@+id/imgPerfil"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_user"
-                app:tint="#D3D3D3" />
+                android:background="@drawable/circle_background" />
+
+
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -42,6 +44,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/txtEditarPerfil"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/texto_editar_perfil"

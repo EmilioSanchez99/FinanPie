@@ -6,4 +6,10 @@
     </style>
 
     <style name="Theme.FinanPie" parent="Base.Theme.FinanPie" />
+    <style name="ToolbarTitleBold" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/gris_oscuro</item>
+    </style>
+
 </resources>
