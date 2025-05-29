@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +46,60 @@ public class PerfilFragment extends Fragment {
         TextView txtEditarPerfil = view.findViewById(R.id.txtEditarPerfil);
         CardView recomendarCard = view.findViewById(R.id.recomendarAmigos);
         CardView premiumCard = view.findViewById(R.id.premium);
+        CardView carlificarCard = view.findViewById(R.id.carlificar);
+        CardView bloquearAnunciosCard = view.findViewById(R.id.bloquear_anuncios);
+        CardView ajustesCard = view.findViewById(R.id.aboutUs);
+        CardView contactoCard = view.findViewById(R.id.contacto);
+
+
+        contactoCard.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setData(Uri.parse("mailto:finanpie.app@gmail.com"));
+
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Contacto desde la app FinanPie");
+            intent.putExtra(Intent.EXTRA_TEXT, "Hola,!");
+
+            try {
+                startActivity(Intent.createChooser(intent, "Enviar correo con..."));
+            } catch (Exception e) {
+                Toast.makeText(getContext(), "No se pudo abrir el cliente de correo", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        ajustesCard.setOnClickListener(v -> mostrarVentanaSobreNosotros());
+
+
+        bloquearAnunciosCard.setOnClickListener(v -> {
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Desbloquea los anuncios")
+                    .setMessage("Elimina todos los anuncios sin necesidad de ser Premium!")
+                    .setPositiveButton("Comprar", (dialog, which) -> {
+                        Toast.makeText(getContext(), "Función aún no disponible", Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton("Cancelar", null)
+                    .show();
+        });
+
+
+        carlificarCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_calificacion, null);
+                RatingBar ratingBar = dialogView.findViewById(R.id.ratingBar);
+
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Califica la app")
+                        .setView(dialogView)
+                        .setPositiveButton("Aceptar", (dialog, which) -> {
+                            float rating = ratingBar.getRating();
+                            Toast.makeText(getContext(), "Gracias por tu valoración: " + rating + " estrellas", Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton("Cancelar", null)
+                        .show();
+            }
+        });
+
 
         txtEditarPerfil.setOnClickListener(v -> abrirGaleria());
 
@@ -73,6 +128,34 @@ public class PerfilFragment extends Fragment {
         cargarImagenPerfil();
         return view;
     }
+    private void mostrarVentanaSobreNosotros() {
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_sobre_nosotros, null);
+
+        TextView txtIntegrantes = dialogView.findViewById(R.id.txtIntegrantes);
+        TextView txtWeb = dialogView.findViewById(R.id.txtWeb);
+
+        String integrantes =
+                "Emilio Sánchez Vargas – 25 años\n" +
+                        "Carlos Fernández Cano – 25 años\n" +
+                        "Javier Marín Trujillo – 25 años\n" +
+                        "Víctor Vera Rodrigues – 25 años";
+
+
+        txtIntegrantes.setText(integrantes);
+
+        txtWeb.setText("Visita nuestra web");
+        txtWeb.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.medac.es.com"));
+            startActivity(intent);
+        });
+
+        new AlertDialog.Builder(getContext())
+                .setTitle("Equipo FinanPie")
+                .setView(dialogView)
+                .setPositiveButton("Cerrar", null)
+                .show();
+    }
+
 
     private void abrirGaleria() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
