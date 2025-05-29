@@ -15,7 +15,7 @@
         app:titleCentered="true"
         app:titleTextColor="@color/toolbar_text"
         app:titleTextAppearance="@style/ToolbarTitleBold"
-        android:background="@color/toolbar_primary"
+        android:background="@color/azul_medio"
         />
 
 

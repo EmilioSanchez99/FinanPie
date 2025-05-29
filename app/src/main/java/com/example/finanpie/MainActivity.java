@@ -1,7 +1,9 @@
 package com.example.finanpie;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -14,6 +16,8 @@ import com.example.finanpie.TabFragments.ViewPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -75,11 +79,30 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        String itemId = item.getTitle().toString();
-        if ("Cerrar sesion".equals(itemId)) {
+        int id = item.getItemId();
+        if (id == R.id.action_logout) {
             signOut();
+            return true;
+        } else if (id == R.id.cambiar_idioma) {
+            cambiarIdioma("en");
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void cambiarIdioma(String lenguaje) {
+        Locale locale = new Locale(lenguaje);
+        Locale.setDefault(locale);
+
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+
+        Intent refresh = new Intent(this, this.getClass());
+        refresh.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(refresh);
+        finish();
+    }
+
 }

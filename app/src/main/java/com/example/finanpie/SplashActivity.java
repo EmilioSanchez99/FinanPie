@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private static final int DURACION_SPLASH = 5000; // opcional, si quieres forzar tiempo
+    private static final int DURACION_SPLASH = 5000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +21,7 @@ public class SplashActivity extends AppCompatActivity {
         videoView.setVideoURI(videoUri);
 
         videoView.setOnCompletionListener(mp -> {
-            startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+            startActivity(new Intent(SplashActivity.this, MainActivity.class));
             finish();
         });
 

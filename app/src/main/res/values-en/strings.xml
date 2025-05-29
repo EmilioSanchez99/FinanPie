@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="app_name">FinanPie</string>
+    <string name="app_logo">FinanPie</string>
+
+    <!-- Login -->
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="login_button">Login</string>
+    <string name="register_link">Create Account</string>
+
+    <!-- Registration -->
+    <string name="hint_nombre">First Name</string>
+    <string name="hint_apellido">Last Name</string>
+    <string name="hint_correo">Email Address</string>
+    <string name="hint_edad">Age</string>
+    <string name="hint_contrasena">Password</string>
+    <string name="hint_saldo_inicial">Initial Balance</string>
+    <string name="btn_crear_cuenta">Create Account</string>
+
+    <!-- Profile -->
+    <string name="texto_hola">Hello</string>
+    <string name="texto_editar_perfil">Edit profile</string>
+
+    <!-- Options -->
+    <string name="miembro_premium">Premium Member</string>
+    <string name="recomendar_amigos">Recommend to friends</string>
+    <string name="calificar_app">Rate the app</string>
+    <string name="bloquear_anuncios">Block ads</string>
+    <string name="ajustes">Settings</string>
+    <string name="about_us">About us</string>
+    <string name="contacto">Contact</string>
+
+    <!-- Goals -->
+    <string name="hint_nombre_meta">Goal name</string>
+    <string name="hint_cantidad_objetivo">Target amount (€)</string>
+
+    <!-- Main screen -->
+    <string name="nombre_usuario">Name</string>
+    <string name="btn_ingresar">Deposit</string>
+    <string name="btn_retirar">Withdraw</string>
+
+    <!-- Password recovery -->
+    <string name="forgot_password">Forgot your password?</string>
+    <string name="access_direct">Direct access</string>
+
+    <string name="saludo_usuario">Hello, %1$s</string>
+    <string name="saldo_insuficiente">Insufficient funds. You have: %1$.2f€ available</string>
+    <string name="usuario_no_encontrado">User not found</string>
+    <string name="error_registrar_movimiento">Error registering movement</string>
+    <string name="movimiento_registrado">Movement saved</string>
+    <string name="ingresar_saldo">Deposit amount</string>
+    <string name="retirar_saldo">Withdraw amount</string>
+    <string name="hint_cantidad">Amount (€)</string>
+    <string name="formato_invalido">Invalid format</string>
+    <string name="cantidad_invalida">Enter a valid amount</string>
+    <string name="cantidad_menor_cero">Amount must be greater than 0</string>
+    <string name="error_cargar_perfil">Error loading profile</string>
+    <string name="grafico_saldo_disponible">Available Balance</string>
+    <string name="grafico_saldo_gastado">Spent</string>
+    <string name="titulo_nueva_meta">New goal</string>
+
+    <string name="btn_crear">Create</string>
+    <string name="btn_cancelar">Cancel</string>
+    <string name="toast_completa_campos">Fill in all fields</string>
+    <string name="toast_cantidad_invalida">Invalid amount</string>
+    <string name="toast_meta_guardada">Goal saved successfully</string>
+    <string name="toast_usuario_no_autenticado">User not authenticated</string>
+    <string name="toast_usuario_no_encontrado">User not found</string>
+    <string name="toast_error_eliminar_meta">Error deleting goal</string>
+    <string name="toast_meta_eliminada">Goal deleted</string>
+    <string name="dialog_titulo_eliminar">Delete goal</string>
+    <string name="dialog_mensaje_eliminar">Are you sure you want to delete this goal?</string>
+    <string name="dialog_si">Yes</string>
+    <string name="dialog_cancelar">Cancel</string>
+    <string name="dialog_titulo_ingresar_meta">Deposit to goal</string>
+    <string name="hint_cantidad_meta">Amount (€)</string>
+    <string name="btn_aniadir">Add</string>
+    <string name="movimiento_tipo">Type: %1$s</string>
+    <string name="movimiento_monto">Amount: %1$.2f €</string>
+    <string name="movimiento_fecha">Date: %1$s</string>
+
+    <string name="toast_ingrese_cantidad">Please enter an amount</string>
+    <string name="toast_no_superar_objetivo">You cant exceed the goal. You need %1$.2f€</string>
+    <string name="toast_error_guardar_acumulado">Error saving progress: %1$s</string>
+    <string name="progreso_meta">Progress: %1$d%% (%2$.2f / %3$.2f€)</string><string name="titulo_eliminar_movimiento">Delete transaction</string>
+    <string name="mensaje_eliminar_movimiento">Are you sure you want to delete this transaction?</string>
+    <string name="boton_si">Yes</string>
+    <string name="boton_cancelar">Cancel</string>
+    <string name="movimiento_eliminado">Transaction deleted</string>
+    <string name="error_eliminar">Error deleting</string>
+
+    <string name="titulo_eliminar_todo">Delete all transactions</string>
+    <string name="mensaje_eliminar_todo">Are you sure you want to delete all transactions?</string>
+    <string name="todo_eliminado">All deleted and balances reset</string>
+    <string name="error_eliminar_todos">Error deleting transactions</string>
+
+    <string name="error_cargar_movimientos">Error loading transactions</string>
+
+    <string name="orden_ascendente">Order: Ascending</string>
+    <string name="orden_descendente">Order: Descending</string>
+
+    <string name="sin_movimientos">No transactions to export</string>
+    <string name="exportado_correcto">Exported to Documents:\n%1$s</string>
+    <string name="error_exportar">Export error: %1$s</string>
+
+
+
+
+</resources>

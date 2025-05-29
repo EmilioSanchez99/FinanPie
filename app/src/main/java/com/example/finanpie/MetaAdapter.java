@@ -45,19 +45,22 @@ public class MetaAdapter extends RecyclerView.Adapter<MetaAdapter.MetaViewHolder
 
         holder.tvNombreMeta.setText(meta.getNombre());
 
-        double acumulado = meta.getAcumulado(); // 🔄 estos valores se actualizan dinámicamente
+        double acumulado = meta.getAcumulado();
         double objetivo = meta.getObjetivo();
         int progreso = (int) ((acumulado / objetivo) * 100);
 
-        holder.tvProgresoMeta.setText("Progreso: " + progreso + "% (" +
-                acumulado + " / " + objetivo + "€)");
+        holder.tvProgresoMeta.setText(context.getString(
+                R.string.progreso_meta,
+                progreso,
+                acumulado,
+                objetivo
+        ));
         holder.progressBar.setProgress(progreso);
 
         if (holder.cardMeta instanceof androidx.cardview.widget.CardView) {
             androidx.cardview.widget.CardView card = (androidx.cardview.widget.CardView) holder.cardMeta;
-
             if (progreso >= 100) {
-                card.setCardBackgroundColor(context.getResources().getColor(R.color.verdeSaldo));
+                card.setCardBackgroundColor(context.getResources().getColor(R.color.verde_esmeralda));
             } else {
                 card.setCardBackgroundColor(context.getResources().getColor(android.R.color.white));
             }
@@ -65,17 +68,17 @@ public class MetaAdapter extends RecyclerView.Adapter<MetaAdapter.MetaViewHolder
 
         holder.itemView.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle("Ingresar a la meta");
+            builder.setTitle(context.getString(R.string.dialog_titulo_ingresar_meta));
 
             final EditText input = new EditText(context);
-            input.setHint("Cantidad (€)");
+            input.setHint(context.getString(R.string.hint_cantidad_meta));
             input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             builder.setView(input);
 
-            builder.setPositiveButton("Añadir", (dialog, which) -> {
+            builder.setPositiveButton(context.getString(R.string.btn_aniadir), (dialog, which) -> {
                 String ingresoStr = input.getText().toString().trim();
                 if (ingresoStr.isEmpty()) {
-                    Toast.makeText(context, "Ingrese una cantidad", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, context.getString(R.string.toast_ingrese_cantidad), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -84,14 +87,15 @@ public class MetaAdapter extends RecyclerView.Adapter<MetaAdapter.MetaViewHolder
 
                 if (nuevoAcumulado > objetivo) {
                     double restante = objetivo - acumulado;
-                    Toast.makeText(context, "No puedes superar el objetivo. Te faltan " + restante + "€", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context,
+                            context.getString(R.string.toast_no_superar_objetivo, restante),
+                            Toast.LENGTH_LONG).show();
                     return;
                 }
 
                 meta.setAcumulado(nuevoAcumulado);
                 notifyItemChanged(position);
 
-                // 🔥 Guardar acumulado actualizado en Firebase
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) {
                     String correoUsuario = user.getEmail();
@@ -124,18 +128,18 @@ public class MetaAdapter extends RecyclerView.Adapter<MetaAdapter.MetaViewHolder
 
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
-                                    Toast.makeText(context, "Error al guardar acumulado: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context,
+                                            context.getString(R.string.toast_error_guardar_acumulado, error.getMessage()),
+                                            Toast.LENGTH_SHORT).show();
                                 }
                             });
                 }
             });
 
-
-            builder.setNegativeButton("Cancelar", null);
+            builder.setNegativeButton(context.getString(R.string.btn_cancelar), null);
             builder.show();
         });
     }
-
 
     @Override
     public int getItemCount() {
@@ -156,4 +160,3 @@ public class MetaAdapter extends RecyclerView.Adapter<MetaAdapter.MetaViewHolder
         }
     }
 }
-

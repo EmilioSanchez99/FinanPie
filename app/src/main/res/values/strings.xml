@@ -1,10 +1,100 @@
 <resources>
     <string name="app_name">FinanPie</string>
     <string name="app_logo">FinanPie</string>
+
+    <!-- Login -->
     <string name="email_hint">Email</string>
     <string name="password_hint">Contraseña</string>
     <string name="login_button">Acceder</string>
     <string name="register_link">Crear Cuenta</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Registro -->
+    <string name="hint_nombre">Nombre</string>
+    <string name="hint_apellido">Apellido</string>
+    <string name="hint_correo">Correo Electrónico</string>
+    <string name="hint_edad">Edad</string>
+    <string name="hint_contrasena">Contraseña</string>
+    <string name="hint_saldo_inicial">Saldo Inicial</string>
+    <string name="btn_crear_cuenta">Crear Cuenta</string>
+
+    <string name="texto_hola">Hola</string>
+    <string name="texto_editar_perfil">Editar perfil</string>
+
+    <!-- Opciones -->
+    <string name="miembro_premium">Miembro Premium</string>
+    <string name="recomendar_amigos">Recomendar a amigos</string>
+    <string name="calificar_app">Califica la aplicación</string>
+    <string name="bloquear_anuncios">Bloquear anuncios</string>
+    <string name="ajustes">Ajustes</string>
+    <string name="about_us">About us</string>
+    <string name="contacto">Contacto</string>
+    <string name="hint_nombre_meta">Nombre de la meta</string>
+    <string name="hint_cantidad_objetivo">Cantidad objetivo (€)</string>
+    <string name="nombre_usuario">nombre</string>
+    <string name="btn_ingresar">Ingresar</string>
+    <string name="btn_retirar">Retirar</string>
+    <string name="forgot_password">¿Has olvidado tu contraseña?</string>
+    <string name="access_direct">Acceso directo</string>
+    <string name="saludo_usuario">Hola, %1$s</string>
+    <string name="saldo_insuficiente">Saldo insuficiente. Tienes disponible: %1$.2f€</string>
+    <string name="usuario_no_encontrado">Usuario no encontrado</string>
+    <string name="error_registrar_movimiento">Error al registrar el movimiento</string>
+    <string name="movimiento_registrado">Movimiento registrado</string>
+    <string name="ingresar_saldo">Ingresar saldo</string>
+    <string name="retirar_saldo">Retirar saldo</string>
+    <string name="hint_cantidad">Cantidad (€)</string>
+    <string name="formato_invalido">Formato inválido</string>
+    <string name="cantidad_invalida">Ingrese una cantidad válida</string>
+    <string name="cantidad_menor_cero">La cantidad debe ser mayor que 0</string>
+    <string name="error_cargar_perfil">Error al cargar el perfil</string>
+    <string name="grafico_saldo_disponible">Saldo Disponible</string>
+    <string name="grafico_saldo_gastado">Gastado</string>
+    <string name="titulo_nueva_meta">Nueva meta</string>
+
+    <string name="btn_crear">Crear</string>
+    <string name="btn_cancelar">Cancelar</string>
+    <string name="toast_completa_campos">Completa todos los campos</string>
+    <string name="toast_cantidad_invalida">Cantidad inválida</string>
+    <string name="toast_meta_guardada">Meta guardada correctamente</string>
+    <string name="toast_usuario_no_autenticado">Usuario no autenticado</string>
+    <string name="toast_usuario_no_encontrado">Usuario no encontrado</string>
+    <string name="toast_error_eliminar_meta">Error al eliminar la meta</string>
+    <string name="toast_meta_eliminada">Meta eliminada</string>
+    <string name="dialog_titulo_eliminar">Eliminar meta</string>
+    <string name="dialog_mensaje_eliminar">¿Estás seguro de que quieres eliminar esta meta?</string>
+    <string name="dialog_si">Sí</string>
+    <string name="dialog_cancelar">Cancelar</string>]<string name="dialog_titulo_ingresar_meta">Ingresar a la meta</string>
+    <string name="hint_cantidad_meta">Cantidad (€)</string>
+    <string name="btn_aniadir">Añadir</string>
+    <string name="toast_ingrese_cantidad">Ingrese una cantidad</string>
+    <string name="toast_no_superar_objetivo">No puedes superar el objetivo. Te faltan %1$.2f€</string>
+    <string name="toast_error_guardar_acumulado">Error al guardar acumulado: %1$s</string>
+    <string name="progreso_meta">Progreso: %1$d%% (%2$.2f / %3$.2f€)</string>
+    <string name="movimiento_tipo">Tipo: %1$s</string>
+    <string name="movimiento_monto">Monto: %1$.2f €</string>
+    <string name="movimiento_fecha">Fecha: %1$s</string>
+    <string name="titulo_eliminar_movimiento">Eliminar movimiento</string>
+    <string name="mensaje_eliminar_movimiento">¿Estás seguro de que quieres eliminar este movimiento?</string>
+    <string name="boton_si">Sí</string>
+    <string name="boton_cancelar">Cancelar</string>
+    <string name="movimiento_eliminado">Movimiento eliminado</string>
+    <string name="error_eliminar">Error al eliminar</string>
+
+    <string name="titulo_eliminar_todo">Eliminar todos los movimientos</string>
+    <string name="mensaje_eliminar_todo">¿Estás seguro de que quieres borrar todos los movimientos?</string>
+    <string name="todo_eliminado">Todo eliminado y saldos reiniciados</string>
+    <string name="error_eliminar_todos">Error al eliminar movimientos</string>
+
+    <string name="error_cargar_movimientos">Error al cargar movimientos</string>
+
+    <string name="orden_ascendente">Orden: Ascendente</string>
+    <string name="orden_descendente">Orden: Descendente</string>
+
+    <string name="sin_movimientos">No hay movimientos para exportar</string>
+    <string name="exportado_correcto">Exportado a Documents:\n%1$s</string>
+    <string name="error_exportar">Error al exportar: %1$s</string>
+
+
+
+
 </resources>

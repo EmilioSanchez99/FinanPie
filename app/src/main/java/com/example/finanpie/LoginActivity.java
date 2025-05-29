@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
                         .addOnCompleteListener(LoginActivity.this, task -> {
                             if (task.isSuccessful()) {
                                 // Login exitoso, redirigir al MainActivity
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
                                 intent.putExtra("email", emailAdmin);
                                 startActivity(intent);
                                 finish();
@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        mAuth.signOut(); // Cerrar sesión automáticamente al abrir
+        mAuth.signOut(); 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             Log.d(TAG, "Usuario autenticado: " + currentUser.getEmail());
@@ -112,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (user != null) {
                             Toast.makeText(LoginActivity.this, "Bienvenido: " + user.getEmail(), Toast.LENGTH_SHORT).show();
 
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
                             intent.putExtra("email", email);
                             startActivity(intent);
                             finish();

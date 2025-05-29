@@ -263,20 +263,23 @@ public class ObjetivosFragment extends Fragment {
 
     private void mostrarDialogoCrearMeta() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Nueva meta");
+        builder.setTitle(getString(R.string.titulo_nueva_meta));
 
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_nueva_meta, null);
         EditText etNombre = dialogView.findViewById(R.id.etNombreMetaDialog);
         EditText etObjetivo = dialogView.findViewById(R.id.etObjetivoMetaDialog);
 
+        etNombre.setHint(getString(R.string.hint_nombre_meta));
+        etObjetivo.setHint(getString(R.string.hint_cantidad_objetivo));
+
         builder.setView(dialogView);
 
-        builder.setPositiveButton("Crear", (dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.btn_crear), (dialog, which) -> {
             String nombre = etNombre.getText().toString().trim();
             String objetivoStr = etObjetivo.getText().toString().trim();
 
             if (nombre.isEmpty() || objetivoStr.isEmpty()) {
-                Toast.makeText(getContext(), "Completa todos los campos", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.toast_completa_campos), Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -287,16 +290,17 @@ public class ObjetivosFragment extends Fragment {
 
                 listaMetas.add(nuevaMeta);
                 adapter.notifyItemInserted(listaMetas.size() - 1);
-                guardarMetaEnFirebase(nuevaMeta); // 🔥 Guardar en Firebase
+                guardarMetaEnFirebase(nuevaMeta);
 
             } catch (NumberFormatException e) {
-                Toast.makeText(getContext(), "Cantidad inválida", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.toast_cantidad_invalida), Toast.LENGTH_SHORT).show();
             }
         });
 
-        builder.setNegativeButton("Cancelar", null);
+        builder.setNegativeButton(getString(R.string.btn_cancelar), null);
         builder.show();
     }
+
 
 
 }

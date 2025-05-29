@@ -13,7 +13,8 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/background_primary">
+        android:background="@color/background_primary"
+        app:tabIconTint="@color/tab_icon_color">
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tabPrincipal"
@@ -40,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
-        android:background="@color/background_secondary"/>
+        android:background="@color/gris_claro"/>
 
 
 </LinearLayout>

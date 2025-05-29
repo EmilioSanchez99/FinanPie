@@ -1,9 +1,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/cambiar_idioma"
         android:icon="@drawable/ic_settings"
-        android:title="Settings"
+        android:title="Cambiar idioma"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_logout"

@@ -13,7 +13,7 @@
 
 
         <!--Fondos gennerales-->
-        <color name="background_primary">#FFFDD0</color> <!-- pastel_cream -->
+        <color name="background_primary">#1E3A8A</color> <!-- pastel_cream -->
         <color name="background_secondary">#FFE5B4</color> <!-- pastel_banana -->
         <color name="background_accent">#F8F9FA</color> <!-- Un gris claro para secciones secundarias -->
 
@@ -39,6 +39,14 @@
         <color name="search_border">#CCCCCC</color> <!-- Bordes finos para delimitación -->
         <color name="search_text">#333333</color> <!-- Texto oscuro para buena lectura -->
         <color name="search_placeholder">#888888</color> <!-- Texto tenue dentro del input -->
+
+    <color name="azul_marino">#1E3A8A</color>
+    <color name="blanco">#FFFFFF</color>
+    <color name="gris_oscuro">#374151</color>
+    <color name="verde_esmeralda">#10B981</color>
+    <color name="rojo_suave">#EF4444</color>
+    <color name="azul_medio">#3B82F6</color>
+    <color name="gris_claro">#F1F5F9</color>
 
 
 

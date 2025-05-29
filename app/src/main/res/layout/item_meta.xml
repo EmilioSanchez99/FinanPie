@@ -17,18 +17,22 @@
         <TextView android:id="@+id/tvNombreMeta"
             android:textStyle="bold"
             android:textSize="18sp"
+            android:textColor="@color/azul_marino"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <TextView android:id="@+id/tvProgresoMeta"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/gris_oscuro"/>
 
         <ProgressBar android:id="@+id/progressBarMeta"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:max="100"
-            android:layout_marginTop="8dp" />
+            android:progressTint="@color/azul_marino"
+            android:layout_marginTop="8dp"
+            />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

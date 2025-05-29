@@ -54,7 +54,7 @@ public class PrincipalFragment extends Fragment {
         btnIngresar = view.findViewById(R.id.btnIngresar);
         btnRetirar = view.findViewById(R.id.btnRetirar);
 
-        mAuth = FirebaseAuth.getInstance(); // 👈 inicializar aquí
+        mAuth = FirebaseAuth.getInstance();
         usuariosRef = FirebaseDatabase.getInstance("https://finanpie-a39a2-default-rtdb.europe-west1.firebasedatabase.app").getReference("usuarios");
 
         cargarNombreYSaldo();
@@ -62,52 +62,51 @@ public class PrincipalFragment extends Fragment {
         btnIngresar.setOnClickListener(v -> mostrarDialogoMovimiento("ingreso"));
         btnRetirar.setOnClickListener(v -> mostrarDialogoMovimiento("retirar"));
 
-
         return view;
     }
-
 
     @Override
     public void onResume() {
         super.onResume();
         cargarNombreYSaldo();
     }
+
     public void refrescarGrafico() {
-        cargarNombreYSaldo(); // ya existente
+        cargarNombreYSaldo();
     }
+
     private void mostrarDialogoMovimiento(String tipo) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle(tipo.equals("ingreso") ? "Ingresar saldo" : "Retirar saldo");
+        builder.setTitle(tipo.equals("ingreso") ? getString(R.string.ingresar_saldo) : getString(R.string.retirar_saldo));
 
         final EditText input = new EditText(requireContext());
         input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        input.setHint("Cantidad (€)");
+        input.setHint(getString(R.string.hint_cantidad));
 
         builder.setView(input);
 
         builder.setPositiveButton("Aceptar", (dialog, which) -> {
             String valor = input.getText().toString().trim();
             if (valor.isEmpty()) {
-                Toast.makeText(requireContext(), "Ingrese una cantidad válida", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), getString(R.string.cantidad_invalida), Toast.LENGTH_SHORT).show();
                 return;
             }
 
             try {
                 double monto = Double.parseDouble(valor);
                 if (monto <= 0) {
-                    Toast.makeText(requireContext(), "La cantidad debe ser mayor que 0", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), getString(R.string.cantidad_menor_cero), Toast.LENGTH_SHORT).show();
                 } else {
                     agregarMovimiento(tipo, monto);
                 }
             } catch (NumberFormatException e) {
-                Toast.makeText(requireContext(), "Formato inválido", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), getString(R.string.formato_invalido), Toast.LENGTH_SHORT).show();
             }
         });
 
         builder.setNegativeButton("Cancelar", null);
         builder.show();
     }
-
 
     private void cargarNombreYSaldo() {
         FirebaseUser user = mAuth.getCurrentUser();
@@ -127,7 +126,7 @@ public class PrincipalFragment extends Fragment {
 
                         if (nombre != null) {
                             nombre = nombre.replace("\"", "");
-                            txtNombreUsuario.setText("Hola, " + nombre);
+                            txtNombreUsuario.setText(getString(R.string.saludo_usuario, nombre));
                         }
 
                         if (saldo == null) saldo = 0.0;
@@ -141,26 +140,25 @@ public class PrincipalFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Error al cargar el perfil", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.error_cargar_perfil), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-
     private void mostrarGraficoSaldo(double saldo, double saldoGastado) {
         ArrayList<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry((float) saldo, "Saldo Disponible"));
-        entries.add(new PieEntry((float) saldoGastado, "Gastado"));
+        entries.add(new PieEntry((float) saldo, getString(R.string.grafico_saldo_disponible)));
+        entries.add(new PieEntry((float) saldoGastado, getString(R.string.grafico_saldo_gastado)));
+        pieChart.getDescription().setEnabled(false);
 
-        int verde = ContextCompat.getColor(requireContext(), R.color.verdeSaldo);
-        int rojoClaro = ContextCompat.getColor(requireContext(), R.color.rojoGastado);
-        int fondo = ContextCompat.getColor(requireContext(), R.color.background_primary);
+        int verde = ContextCompat.getColor(requireContext(), R.color.verde_esmeralda);
+        int rojoClaro = ContextCompat.getColor(requireContext(), R.color.rojo_suave);
+        int fondo = ContextCompat.getColor(requireContext(), R.color.gris_claro);
 
-
-        PieDataSet dataSet = new PieDataSet(entries, "Resumen de saldo");
+        PieDataSet dataSet = new PieDataSet(entries, "");
         dataSet.setColors(verde, rojoClaro);
-        dataSet.setValueTextColor(Color.BLACK);
-        dataSet.setValueTextSize(14f);
+        dataSet.setValueTextColor(R.color.azul_marino);
+        dataSet.setValueTextSize(20f);
 
         PieData data = new PieData(dataSet);
 
@@ -168,9 +166,8 @@ public class PrincipalFragment extends Fragment {
         pieChart.setUsePercentValues(false);
         pieChart.setEntryLabelColor(Color.BLACK);
         pieChart.setHoleColor(fondo);
-        pieChart.invalidate(); // refrescar gráfico
+        pieChart.invalidate();
     }
-
 
     private void agregarMovimiento(String tipo, double monto) {
         FirebaseUser user = mAuth.getCurrentUser();
@@ -189,16 +186,14 @@ public class PrincipalFragment extends Fragment {
                         if (saldoActual == null) saldoActual = 0.0;
 
                         if (tipo.equals("retirar") && monto > saldoActual) {
-                            Toast.makeText(getContext(), "Saldo insuficiente. Tienes disponible: " + saldoActual + "€", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), getString(R.string.saldo_insuficiente, saldoActual), Toast.LENGTH_LONG).show();
                             return;
                         }
 
                         double nuevoSaldo = tipo.equals("ingreso") ? saldoActual + monto : saldoActual - monto;
 
-                        // Actualizar saldo
                         ds.getRef().child("saldo").setValue(nuevoSaldo);
 
-                        // 👇 ACTUALIZAR SALDO GASTADO
                         if (tipo.equals("retirar")) {
                             Double saldoGastadoActual = ds.child("saldo_gastado").getValue(Double.class);
                             if (saldoGastadoActual == null) saldoGastadoActual = 0.0;
@@ -206,7 +201,6 @@ public class PrincipalFragment extends Fragment {
                             ds.getRef().child("saldo_gastado").setValue(nuevoGastado);
                         }
 
-                        // Crear movimiento
                         long totalMovs = ds.child("movimientos").getChildrenCount();
                         String nuevoId = "mov" + (totalMovs + 1);
 
@@ -218,23 +212,21 @@ public class PrincipalFragment extends Fragment {
 
                         ds.getRef().child("movimientos").child(nuevoId).setValue(nuevoMovimiento)
                                 .addOnSuccessListener(aVoid -> {
-                                    Toast.makeText(getContext(), "Movimiento registrado", Toast.LENGTH_SHORT).show();
-                                    cargarNombreYSaldo(); // refrescar vista
+                                    Toast.makeText(getContext(), getString(R.string.movimiento_registrado), Toast.LENGTH_SHORT).show();
+                                    cargarNombreYSaldo();
                                 });
 
                         return;
                     }
                 }
 
-                Toast.makeText(getContext(), "Usuario no encontrado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.usuario_no_encontrado), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Error al registrar el movimiento", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.error_registrar_movimiento), Toast.LENGTH_SHORT).show();
             }
         });
     }
-
-
 }

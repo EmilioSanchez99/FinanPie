@@ -27,7 +27,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/email_hint"
-
         app:layout_constraintTop_toBottomOf="@id/logo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -39,8 +38,7 @@
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
             android:background="@drawable/background_edittext"
-            android:textColor="@color/search_text"
-            />
+            android:textColor="@color/search_text" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Password Input -->
@@ -59,8 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-
-            android:background="@drawable/background_edittext"/>
+            android:background="@drawable/background_edittext" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Login Button -->
@@ -89,7 +86,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
 
-
     <!-- Contrasena olvidada -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/contrasenaOlvidadaTextView"
@@ -98,7 +94,7 @@
         android:layout_marginTop="240dp"
         android:fontFamily="sans-serif-medium"
         android:background="?attr/colorError"
-        android:text="¿Has olvidado tu contraseña?"
+        android:text="@string/forgot_password"
         android:textColor="?attr/colorOnErrorContainer"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
@@ -106,14 +102,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/emailLayout" />
 
+    <!-- Acceso directo -->
     <Button
         android:id="@+id/btnAccderDirecto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="128dp"
         android:layout_marginBottom="84dp"
-        android:text="Button"
+        android:text="@string/access_direct"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

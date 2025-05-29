@@ -30,9 +30,9 @@ public class MovimientosAdapter extends RecyclerView.Adapter<MovimientosAdapter.
     @Override
     public void onBindViewHolder(@NonNull MovViewHolder holder, int position) {
         Movimiento m = lista.get(position);
-        holder.tipo.setText("Tipo: " + m.getTipo());
-        holder.monto.setText("Monto: " + m.getMonto() + " €");
-        holder.fecha.setText("Fecha: " + m.getFecha());
+        holder.tipo.setText(holder.itemView.getContext().getString(R.string.movimiento_tipo, m.getTipo()));
+        holder.monto.setText(holder.itemView.getContext().getString(R.string.movimiento_monto, m.getMonto()));
+        holder.fecha.setText(holder.itemView.getContext().getString(R.string.movimiento_fecha, m.getFecha()));
     }
 
     @Override
@@ -51,4 +51,3 @@ public class MovimientosAdapter extends RecyclerView.Adapter<MovimientosAdapter.
         }
     }
 }
-
