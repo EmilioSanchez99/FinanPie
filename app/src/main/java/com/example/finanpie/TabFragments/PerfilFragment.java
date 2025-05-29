@@ -164,6 +164,7 @@ public class PerfilFragment extends Fragment {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             Uri selectedImageUri = data.getData();
             Log.d("PerfilFragment", "Imagen seleccionada: " + selectedImageUri);
+            Toast.makeText(getContext(), getString(R.string.imagen_subida_exitosamente), Toast.LENGTH_SHORT).show();
             subirImagenAFirebase(selectedImageUri);
         }
     }
@@ -224,6 +225,7 @@ public class PerfilFragment extends Fragment {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
+        Toast.makeText(getContext(), R.string.cargando_imagen, Toast.LENGTH_SHORT).show();
         String emailUsuario = user.getEmail();
         DatabaseReference usuariosRef = FirebaseDatabase.getInstance("https://finanpie-a39a2-default-rtdb.europe-west1.firebasedatabase.app")
                 .getReference("usuarios");

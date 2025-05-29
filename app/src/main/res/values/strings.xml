@@ -94,6 +94,7 @@
     <string name="exportado_correcto">Exportado a Documents:\n%1$s</string>
     <string name="error_exportar">Error al exportar: %1$s</string>
     <string name="imagen_subida_exitosamente">Subiendo imagen, espere...</string>
+    <string name="cargando_imagen">Cargando imagen de perfil</string>
 
 
 </resources>

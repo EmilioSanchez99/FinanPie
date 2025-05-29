@@ -105,6 +105,7 @@
     <string name="exportado_correcto">Exported to Documents:\n%1$s</string>
     <string name="error_exportar">Export error: %1$s</string>
     <string name="imagen_subida_exitosamente">Uploading image, wait...</string>
+    <string name="cargando_imagen">Loading profile image...</string>
 
 
 </resources>
