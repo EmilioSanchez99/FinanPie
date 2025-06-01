@@ -122,8 +122,8 @@ public class PerfilFragment extends Fragment {
 
         String integrantes =
                 "Emilio Sánchez Vargas – 25 años\n" +
-                        "Carlos Fernández Cano – 25 años\n" +
-                        "Javier Marín Trujillo – 25 años\n" +
+                        "Carlos Fernández Cano – 28 años\n" +
+                        "Javier Marín Trujillo – 30 años\n" +
                         "Víctor Vera Rodrigues – 25 años";
 
         txtIntegrantes.setText(integrantes);

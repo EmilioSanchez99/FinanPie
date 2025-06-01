@@ -6,19 +6,24 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/azul_marino"
+    android:paddingHorizontal="10dp"
+    android:background="@color/gris_claro"
     tools:context=".CrearCuentaActivity">
+
 
     <!-- Nombre -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/nombreLayout"
-        android:layout_width="394dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/hint_nombre"
-        app:boxCornerRadiusTopStart="16dp"
+        app:boxCornerRadiusBottomEnd="16dp"
+        app:boxCornerRadiusBottomStart="16dp"
         app:boxCornerRadiusTopEnd="16dp"
+        app:boxCornerRadiusTopStart="16dp"
         app:boxStrokeWidth="2dp"
-        app:boxBackgroundColor="@color/background_secondary"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/azul_marino"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -27,20 +32,24 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etNombreCrearCuenta"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
+            android:layout_height="56dp"
             android:padding="12dp"
-            android:background="@drawable/background_edittext"
             android:inputType="textPersonName"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Apellido -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/apellidoLayout"
-        android:layout_width="394dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/hint_apellido"
+        app:boxCornerRadiusBottomEnd="16dp"
+        app:boxCornerRadiusBottomStart="16dp"
+        app:boxCornerRadiusTopEnd="16dp"
+        app:boxCornerRadiusTopStart="16dp"
         app:boxStrokeWidth="2dp"
-        app:boxBackgroundColor="@color/background_secondary"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/azul_marino"
         app:layout_constraintTop_toBottomOf="@id/nombreLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,18 +60,22 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:padding="12dp"
-            android:background="@drawable/background_edittext"
             android:inputType="textPersonName"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Correo Electrónico -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/correoLayout"
-        android:layout_width="394dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/hint_correo"
+        app:boxCornerRadiusBottomEnd="16dp"
+        app:boxCornerRadiusBottomStart="16dp"
+        app:boxCornerRadiusTopEnd="16dp"
+        app:boxCornerRadiusTopStart="16dp"
         app:boxStrokeWidth="2dp"
-        app:boxBackgroundColor="@color/background_secondary"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/azul_marino"
         app:layout_constraintTop_toBottomOf="@id/apellidoLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -73,18 +86,22 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:padding="12dp"
-            android:background="@drawable/background_edittext"
             android:inputType="textEmailAddress"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Edad -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/edadLayout"
-        android:layout_width="394dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/hint_edad"
+        app:boxCornerRadiusBottomEnd="16dp"
+        app:boxCornerRadiusBottomStart="16dp"
+        app:boxCornerRadiusTopEnd="16dp"
+        app:boxCornerRadiusTopStart="16dp"
         app:boxStrokeWidth="2dp"
-        app:boxBackgroundColor="@color/background_secondary"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/azul_marino"
         app:layout_constraintTop_toBottomOf="@id/correoLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -95,18 +112,22 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:padding="12dp"
-            android:background="@drawable/background_edittext"
             android:inputType="number"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Contraseña -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/contrasenaLayout"
-        android:layout_width="394dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/hint_contrasena"
+        app:boxCornerRadiusBottomEnd="16dp"
+        app:boxCornerRadiusBottomStart="16dp"
+        app:boxCornerRadiusTopEnd="16dp"
+        app:boxCornerRadiusTopStart="16dp"
         app:boxStrokeWidth="2dp"
-        app:boxBackgroundColor="@color/background_secondary"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/azul_marino"
         app:layout_constraintTop_toBottomOf="@id/edadLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -117,18 +138,22 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:padding="12dp"
-            android:background="@drawable/background_edittext"
             android:inputType="textPassword"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Saldo Inicial -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/saldoLayout"
-        android:layout_width="394dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/hint_saldo_inicial"
+        app:boxCornerRadiusBottomEnd="16dp"
+        app:boxCornerRadiusBottomStart="16dp"
+        app:boxCornerRadiusTopEnd="16dp"
+        app:boxCornerRadiusTopStart="16dp"
         app:boxStrokeWidth="2dp"
-        app:boxBackgroundColor="@color/background_secondary"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/azul_marino"
         app:layout_constraintTop_toBottomOf="@id/contrasenaLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -139,14 +164,13 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:padding="12dp"
-            android:background="@drawable/background_edittext"
             android:inputType="numberDecimal"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Botón Crear Cuenta -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCrearCuenta"
-        android:layout_width="394dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/btn_crear_cuenta"
         android:textColor="@color/button_primary_text"
