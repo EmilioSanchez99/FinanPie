@@ -199,8 +199,8 @@ public class HistorialFragment extends Fragment {
     }
 
 
-    // Métodos de Firebase (cargar, eliminar, actualizar)
-    // Se pueden mover a una clase repositorio si quieres aún más separación de lógica
+    // metodos de Firebase (cargar, eliminar, actualizar)
+
 
     private void cargarMovimientos() {
         FirebaseUser user = mAuth.getCurrentUser();

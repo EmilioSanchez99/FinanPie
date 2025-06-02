@@ -4,10 +4,9 @@ public class Meta {
     private String id;
     private String nombre;
     private double objetivo;
-    private double acumulado; // 🔥 nuevo campo
+    private double acumulado;
 
     public Meta() {
-        // Requerido por Firebase
     }
 
     public Meta(String id, String nombre, double objetivo) {

@@ -21,7 +21,7 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ViewPagerAdapter adapter; // Usa esta
+    private ViewPagerAdapter adapter;
     private ViewPager2 viewPager;
 
     @Override
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tablayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
-        adapter = new ViewPagerAdapter(this); // Asigna a la variable global
+        adapter = new ViewPagerAdapter(this);
         viewPager.setAdapter(adapter);
 
 
@@ -59,9 +59,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    // 🔁 Permitir a otros fragments acceder a PrincipalFragment
     public PrincipalFragment getPrincipalFragment() {
-        return (PrincipalFragment) adapter.getFragment(0); // posición 0 = PrincipalFragment
+        return (PrincipalFragment) adapter.getFragment(0);
     }
 
     private void signOut() {

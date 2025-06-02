@@ -11,7 +11,6 @@ public class Usuario {
 
 
     public Usuario() {
-        // Constructor vacío requerido por Firebase
     }
 
     public Usuario(String id, String nombre, String apellido, String correo, int edad, double saldo, double saldo_gastado) {
